@@ -1,0 +1,50 @@
+name: Grade proposal
+
+# Advisory only. This workflow scores a changed proposal against rubric.md
+# and posts the score as a PR comment — it never approves, never merges,
+# and never deploys anything. Only a named owner's Decision: block in the
+# proposal file itself is a real decision (see rubric.md).
+#
+# Requires an ANTHROPIC_API_KEY repository secret — see README.md,
+# "10-minute install" for how to add it.
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    paths:
+      - "proposals/**"
+
+jobs:
+  grade:
+    if: ${{ !github.event.pull_request.draft }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
+      - uses: anthropics/claude-code-action@v1
+        env:
+          GH_TOKEN: ${{ github.token }}
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            A pull request changed one or more files under proposals/**.
+            Read rubric.md, then read the changed proposal file(s) in this
+            PR's diff. Score each proposal against every criterion in
+            rubric.md: a score of 1/3/5 or "?" if the evidence to score it
+            doesn't exist yet, plus a confidence (high/medium/low), plus,
+            for any "?", the specific question that would resolve it.
+            This is advisory only — say so explicitly in your comment, and
+            do not compute or imply any decision. Post your scored rubric
+            table as a single PR comment with `gh pr comment ${{ github.event.pull_request.number }} --body-file <file>`.
+            Do not edit the proposal file. Do not approve or merge this PR
+            under any circumstances — you have no authority to decide
+            PROMOTED/PARKED/COMPOSTED; only the named owner's own
+            `Decision:` block in the proposal file is a real decision.
+          claude_args: |
+            --allowedTools "Bash(gh pr comment *)"
