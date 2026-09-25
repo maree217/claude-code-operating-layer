@@ -117,6 +117,24 @@ process, what does it cost.
   pass for a human. Only a named owner's `Decision:` block is a real
   decision — see rubric.md and `.claude/skills/propose/SKILL.md`.
 
+## What the guardrails are — and aren't
+
+`.claude/hooks/` catches mistakes and keeps an honest agent inside the
+rules in `OPERATING-RULES.md`. It is pattern-based — it matches command
+text and file paths, the way `guard_commands.py`'s own docstring explains
+in detail for `git push` — and pattern matching is not a security boundary
+against a determined adversary who's trying to get around it, only a
+check against the agent's own straightforward attempt.
+
+For something you actually need to hold under adversarial conditions —
+"nothing merges to `main` without review", above all — the real control is
+server-side: GitHub's own
+[branch protection rules](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches)
+and required reviews, enforced by GitHub itself, not by anything running
+on the agent's own machine. This kit's hooks are the first layer of
+defence in depth — the one that stops a mistake before it needs a second
+layer to catch it — not the last one.
+
 ## Licence
 
 MIT — see `LICENSE`.

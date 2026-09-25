@@ -32,13 +32,24 @@ def run_hook(hook_name: str, payload: dict, project_dir: str = None):
     return proc.returncode, proc.stdout, proc.stderr
 
 
-def bash_payload(command: str, session_id: str = "test-session"):
+def bash_payload(command: str, session_id: str = "test-session", cwd: str = None):
     return {
         "session_id": session_id,
         "tool_name": "Bash",
         "tool_input": {"command": command},
-        "cwd": REPO_ROOT,
+        "cwd": cwd or REPO_ROOT,
     }
+
+
+def make_git_repo(path: str, branch: str = "main"):
+    """Create a real git repo at `path` on `branch`, with no commits (an
+    "unborn" branch — the shape a freshly `git init`'d repo has). Used to
+    test guard_commands.py's current-branch resolution against a real
+    `git symbolic-ref`/`rev-parse`, not a mock."""
+    subprocess.run(["git", "init", "-q", "-b", branch, path], check=True,
+                    capture_output=True, text=True)
+    subprocess.run(["git", "-C", path, "config", "user.email", "test@example.com"], check=True)
+    subprocess.run(["git", "-C", path, "config", "user.name", "Test"], check=True)
 
 
 def write_payload(file_path: str, content: str, session_id: str = "test-session"):
