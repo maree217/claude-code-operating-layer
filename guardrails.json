@@ -1,0 +1,35 @@
+{
+  "_purpose": "Machine-readable guardrails. The hooks in .claude/hooks/ read this file at runtime, and .claude/settings.json duplicates the sharpest edges as permission-deny rules for defence in depth. Edit this file via a proposal, same as anything else in operating-layer/ — see operating-layer/OPERATING-RULES.md.",
+
+  "protected_branches": ["main", "master", "production"],
+
+  "protected_paths": [
+    "infra/**",
+    "deploy/**",
+    ".github/workflows/**"
+  ],
+
+  "_protected_paths_note": "operating-layer/** is deliberately NOT protected here — it is edited via proposals (see propose skill), not locked behind this guard. The line-budget hook (layer_budget.py) is the control on that directory instead.",
+
+  "blocked_command_patterns": [
+    "\\bgit\\s+push\\b[^|;&\\n]*(--force\\b|-f\\b)",
+    "\\bgit\\s+push\\b[^|;&\\n]*\\b(origin\\s+)?(main|master|production)\\b",
+    "\\bgh\\s+pr\\s+merge\\b",
+    "\\bgh\\s+pr\\s+review\\b[^|;&\\n]*--approve\\b",
+    "\\brm\\s+-[a-zA-Z]*r[a-zA-Z]*f[a-zA-Z]*\\s+(?!/tmp/|\\./tmp/|/private/tmp/)",
+    "\\brm\\s+-[a-zA-Z]*f[a-zA-Z]*r[a-zA-Z]*\\s+(?!/tmp/|\\./tmp/|/private/tmp/)",
+    "\\bterraform\\s+apply\\b",
+    "\\bkubectl\\s+apply\\b",
+    "\\bkubectl\\s+.*--namespace[= ]prod",
+    "\\bpsql\\b.*\\bprod",
+    "\\b(mysql|psql)\\b[^|;&\\n]*\\bDROP\\s+(TABLE|DATABASE)\\b"
+  ],
+
+  "_blocked_command_patterns_note": "Case-insensitive, matched with re.search against the raw command string by guard_commands.py. These are a floor, not a ceiling — they catch the shapes named in OPERATING-RULES.md, not every possible destructive command. A Bash rule is not a security boundary (see the Claude Code permissions docs on wrapper/quoting evasion) — the point is to stop the agent's own straightforward attempt, and to make the stop legible.",
+
+  "outbound_allowlist": [],
+
+  "_outbound_allowlist_note": "Placeholder. Populate with domains/services agents may send outbound messages to (email, chat, webhooks) once you wire an outbound-send hook. Empty means: no enforced allowlist yet, so treat any outbound send as something OPERATING-RULES.md says must go to a person.",
+
+  "operating_layer_line_budget": 80
+}

@@ -1,0 +1,14 @@
+# Local observability log — never committed (see .claude/hooks/audit_log.py)
+.claude/audit/
+
+# Python
+__pycache__/
+*.pyc
+
+# OS / editor noise
+.DS_Store
+*.swp
+
+# Local, personal Claude Code settings
+.claude/settings.local.json
+CLAUDE.local.md
