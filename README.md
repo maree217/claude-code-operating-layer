@@ -1,25 +1,24 @@
-# Claude Code operating layer — a starter kit
+# Claude Code operating layer
 
-This is a working starter kit for the "operating layer" described in
-[The missing layer in every Claude Code rollout](ARTICLE_URL): the plain-language
-account of how your organisation works — what you sell, who decides, what
-agents may do alone, what needs a person, and what you've learned — that
-every serious agent rollout eventually needs and almost none ship with. Copy
-the files below into an existing repo, fill in the four sheets for your own
-organisation, and the same loop that runs a specimen fictional company below
-runs yours.
+A starter kit for the part of an agent rollout nobody ships: the **operating layer** — a
+plain-language account of how your organisation works, what agents may do alone, and what
+needs a person.
+
+Copy it into a repo, fill in four sheets for your organisation, and the loop that runs the
+fictional Specimen Components example below runs yours. It works with Claude Code out of the
+box, and the same files stay readable to any other agent harness.
 
 ## The three layers
 
 ```
 +-------------------------------------------------------------+
-|  OPERATING LAYER   — yours. nobody ships it. (owned)         |
-|  operating-layer/*.md, guardrails.json, .claude/hooks/       |
+|  OPERATING LAYER   — yours. nobody ships it. (owned)        |
+|  operating-layer/*.md, guardrails.json, .claude/hooks/      |
 +-------------------------------------------------------------+
-|  HARNESS            — Claude Code, Codex, Copilot agents...  |
-|  swappable, converging fast on the same shape (swappable)    |
+|  HARNESS            — Claude Code, Codex, Copilot agents... |
+|  swappable, converging fast on the same shape (swappable)   |
 +-------------------------------------------------------------+
-|  MODEL               — rented, changes every quarter          |
+|  MODEL               — rented, changes every quarter        |
 +-------------------------------------------------------------+
 ```
 
