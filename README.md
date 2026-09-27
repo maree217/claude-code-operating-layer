@@ -8,6 +8,8 @@ Copy it into a repo, fill in four sheets for your organisation, and the loop tha
 fictional Specimen Components example below runs yours. It works with Claude Code out of the
 box, and the same files stay readable to any other agent harness.
 
+Background: [The missing layer in every Claude Code rollout](https://aicb.cloud/missing-layer/).
+
 ## The three layers
 
 ```
